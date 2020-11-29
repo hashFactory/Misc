@@ -2,6 +2,7 @@ import spotipy
 import sys
 import os
 import json
+import re
 from pprint import pprint
 from time import sleep
 from spotipy.oauth2 import SpotifyClientCredentials
@@ -48,7 +49,7 @@ class Track:
 
 
 #setup
-playlist_uri = 'spotify:playlist:0Cat7SXwGpQlxAzueXcELF'
+playlist_uri = 'spotify:playlist:2aph7VMGlMDJ39frJRpQG1'
 
 sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials())
 
@@ -120,7 +121,11 @@ while True:
     if offset > len(list_track_uris):
         break
 
-features = open(playlist_name + ".csv", "w+")
+def get_valid_filename(s):
+    s = str(s).strip().replace(' ', '_')
+    return re.sub(r'(?u)[^-\w.]', '', s)
+
+features = open(get_valid_filename(playlist_name) + ".csv", "w+")
 
 attrs = vars(list_tracks[0])
 features.write('; '.join("%s" % item[0] for item in attrs.items()) + "\n")
